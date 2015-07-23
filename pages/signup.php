@@ -8,14 +8,16 @@
  require_once('../includes/init.php');
 
  // Process the submitted form
- if ($_SERVER['REQUEST_METHOD'] === 'POST')
- {
+ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-   User::signup($_POST);
+   $user = User::signup($_POST);
 
-   // Redirect to signup success page
-   header('Location: http://' . $_SERVER['HTTP_HOST'] . '/sandbox/bazinga/pages/signup_success.php');
-   exit;
+   if (empty($user->errors)) {
+
+     // Redirect to signup success page
+     header('Location: http://' . $_SERVER['HTTP_HOST'] . '/sandbox/bazinga/pages/signup_success.php');
+     exit;
+   }
  }
 
  // Set the title, show the page header, then the rest of the HTML
@@ -23,14 +25,24 @@
  include('../includes/header.php');
 ?>
 
+<div class="error-log">
+ <?php if (isset($user)): ?>
+   <ul>
+     <?php foreach ($user->errors as $error): ?>
+       <li><?php echo $error; ?></li>
+     <?php endforeach; ?>
+   </ul>
+ <?php endif; ?>
+</div>
+
 <div class="container">
   <form id="myform" class="form-signin" method="POST">
     <h2 class="form-signin-heading">Please Sign Up</h2>
     <label for="Name" class="sr-only">Name</label>
-    <input type="text" id="name" name="name" value=""
+    <input type="text" id="name" name="name" value="<?php echo isset($user) ? htmlspecialchars($user->name) : ''; ?>"
            class="form-control" placeholder="Name" required autofocus>
     <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" name="inputEmail" value=""
+    <input type="email" id="inputEmail" name="inputEmail" value="<?php echo isset($user) ? htmlspecialchars($user->email) : ''; ?>"
            class="form-control" placeholder="Email Address" required>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
