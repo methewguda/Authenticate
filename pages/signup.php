@@ -4,9 +4,23 @@
  * Sign Up a New User
  */
 
-// Set the title, show the page header, then the rest of the HTML
-$page_title = 'Sign Up';
-include('../includes/header.php');
+ // Initialisation
+ require_once('../includes/init.php');
+
+ // Process the submitted form
+ if ($_SERVER['REQUEST_METHOD'] === 'POST')
+ {
+
+   User::signup($_POST);
+
+   // Redirect to signup success page
+   header('Location: http://' . $_SERVER['HTTP_HOST'] . '/sandbox/bazinga/pages/signup_success.php');
+   exit;
+ }
+
+ // Set the title, show the page header, then the rest of the HTML
+ $page_title = 'Sign Up';
+ include('../includes/header.php');
 ?>
 
 <div class="container">

@@ -1,12 +1,16 @@
 <?php
 
-/**
- * Homepage
- */
+ /**
+  * Homepage
+  */
 
-// Set the title, show the page header, then the rest of the HTML
-$page_title = 'Home';
-include('includes/header.php');
+ // Initialisation
+ require_once('includes/init.php');
+
+ // Set the title, show the page header, then the rest of the HTML
+ $page_title = 'Home';
+ include('includes/header.php');
+ 
 ?>
 
 <main id="homepage">
