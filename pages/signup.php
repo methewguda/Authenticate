@@ -15,8 +15,7 @@
    if (empty($user->errors)) {
 
      // Redirect to signup success page
-     header('Location: http://' . $_SERVER['HTTP_HOST'] . '/sandbox/bazinga/pages/signup_success.php');
-     exit;
+     Util::redirect('pages/signup_success.php');
    }
  }
 
