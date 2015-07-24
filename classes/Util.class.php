@@ -15,7 +15,7 @@ class Util
    */
   public static function redirect($url)
   {
-    header('Location: http://' . $_SERVER['HTTP_HOST'] . '/sandbox/bazinga/' . $url);
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . '/sandbox/bazinga' . $url);
     exit;
   }
 

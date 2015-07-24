@@ -15,7 +15,7 @@
    if (empty($user->errors)) {
 
      // Redirect to signup success page
-     Util::redirect('pages/signup_success.php');
+     Util::redirect('/pages/signup_success.php');
    }
  }
 

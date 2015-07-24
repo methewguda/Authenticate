@@ -14,7 +14,7 @@
 
    if (Auth::getInstance()->login($email, $_POST['inputPassword'])) {
      // Redirect to home page
-     Util::redirect('index.php');
+     Util::redirect('/index.php');
    }
  }
 

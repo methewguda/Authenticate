@@ -18,7 +18,9 @@
     <?php if (Auth::getInstance()->isLoggedIn()): ?>
     <div class="success">
       <div class="success-messege">
-        <p>Hello <?php echo htmlspecialchars(Auth::getInstance()->getCurrentUser()->name); ?></p>
+        <p>Hello <?php echo htmlspecialchars(Auth::getInstance()->getCurrentUser()->name); ?>.
+          <a href="pages/signout.php">Sign Out</a>
+        </p>
       </div>
     </div>
     <?php else: ?>
