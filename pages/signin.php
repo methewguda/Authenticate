@@ -13,9 +13,17 @@
    $email = $_POST['inputEmail'];
 
    if (Auth::getInstance()->login($email, $_POST['inputPassword'])) {
-     // Redirect to home page
-     Util::redirect('/index.php');
-   }
+
+    // Redirect to home page or intended page, if set
+    if (isset($_SESSION['return_to'])) {
+      $url = $_SESSION['return_to'];
+      unset($_SESSION['return_to']);
+    } else {
+      $url = '/index.php';
+    }
+
+    Util::redirect($url);
+  }
  }
 
  // Set the title, show the page header, then the rest of the HTML

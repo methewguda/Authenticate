@@ -18,8 +18,8 @@
     <?php if (Auth::getInstance()->isLoggedIn()): ?>
     <div class="success">
       <div class="success-messege">
-        <p>Hello <?php echo htmlspecialchars(Auth::getInstance()->getCurrentUser()->name); ?>.
-          <a href="pages/signout.php">Sign Out</a>
+        <p>Hello <?php echo htmlspecialchars(Auth::getInstance()->getCurrentUser()->name); ?>.<br>
+           <a href="pages/profile.php">View profile</a> or <a href="pages/signout.php">Sign Out</a>
         </p>
       </div>
     </div>

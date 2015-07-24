@@ -53,7 +53,7 @@ class Auth
     $_SESSION = array();
     session_destroy();
   }
-  
+
   /**
    * Login a user
    *
@@ -108,6 +108,25 @@ class Auth
  public function isLoggedIn()
  {
    return $this->getCurrentUser() !== null;
+ }
+
+ /**
+ * Redirect to the login page if no user is logged in.
+ *
+ * @return void
+ */
+ public function requireLogin()
+ {
+   if ( ! $this->isLoggedIn()) {
+
+     // Save the requested page to return to after logging in
+     $url = $_SERVER['REQUEST_URI'];
+     if ( ! empty($url)) {
+       $_SESSION['return_to'] = $url;
+     }
+
+     Util::redirect('/pages/signin.php');
+   }
  }
 
 }
