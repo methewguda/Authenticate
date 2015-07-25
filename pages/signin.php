@@ -10,12 +10,15 @@
  // Require the user to NOT be logged in before they can see this page.
  Auth::getInstance()->requireGuest();
 
+ // Get checked status of the "remember me" checkbox
+ $remember_me = isset($_POST['remember_me']);
+
  // Process the submitted form
  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
    $email = $_POST['inputEmail'];
 
-   if (Auth::getInstance()->login($email, $_POST['inputPassword'])) {
+   if (Auth::getInstance()->login($email, $_POST['inputPassword'], $remember_me)) {
 
     // Redirect to home page or intended page, if set
     if (isset($_SESSION['return_to'])) {
@@ -52,7 +55,8 @@
            class="form-control" placeholder="Password" required>
     <div class="checkbox">
       <label>
-        <input id="remember_me" name="remember_me" type="checkbox" value="1"> Remember me
+        <input id="remember_me" name="remember_me" type="checkbox" value="1">
+        <?php if ($remember_me): ?>checked="checked"<?php endif; ?>Remember me
       </label>
       <a class="forgotPassword" href="pages/forgot_password.php">I forgot my password</a>
     </div>

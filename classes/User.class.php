@@ -120,6 +120,118 @@ class User
   }
 
   /**
+   * Find the user by remember token
+   *
+   * @param string $token  token
+   * @return mixed         User object if found, null otherwise
+   */
+  public static function findByRememberToken($token)
+  {
+    try {
+
+      $db = Database::getInstance();
+
+      $stmt = $db->prepare('SELECT u.* FROM users u JOIN remembered_logins r ON u.id = r.user_id WHERE token = :token');
+      $stmt->execute([':token' => $token]);
+      $user = $stmt->fetchObject('User');
+
+      if ($user !== false) {
+        return $user;
+      }
+
+    } catch(PDOException $exception) {
+
+      error_log($exception->getMessage());
+    }
+  }
+
+  /**
+   * Deleted expired remember me tokens
+   *
+   * @return integer  Number of tokens deleted
+   */
+  public static function deleteExpiredTokens()
+  {
+    try {
+
+      $db = Database::getInstance();
+
+      $stmt = $db->prepare("DELETE FROM remembered_logins WHERE expires_at < '" . date('Y-m-d H:i:s') . "'");
+      $stmt->execute();
+
+      return $stmt->rowCount();
+
+    } catch(PDOException $exception) {
+
+      // Log the detailed exception
+      error_log($exception->getMessage());
+    }
+
+    return 0;
+  }
+
+  /**
+   * Remember the login by storing a unique token associated with the user ID
+   *
+   * @param integer $expiry  Expiry timestamp
+   * @return mixed           The token if remembered successfully, false otherwise
+   */
+  public function rememberLogin($expiry)
+  {
+
+    // Generate a unique token
+    $token = uniqid($this->email, true);
+
+    try {
+
+      $db = Database::getInstance();
+
+      $stmt = $db->prepare('INSERT INTO remembered_logins (token, user_id, expires_at) VALUES (:token, :user_id, :expires_at)');
+      $stmt->bindParam(':token', sha1($token));  // store a hash of the token
+      $stmt->bindParam(':user_id', $this->id, PDO::PARAM_INT);
+      $stmt->bindParam(':expires_at', date('Y-m-d H:i:s', $expiry));
+      $stmt->execute();
+
+      if ($stmt->rowCount() == 1) {
+        return $token;
+      }
+
+    } catch(PDOException $exception) {
+
+      // Log the detailed exception
+      error_log($exception->getMessage());
+    }
+
+    return false;
+  }
+
+  /**
+   * Forget the login based on the token value
+   *
+   * @param string $token  Remember token
+   * @return void
+   */
+  public function forgetLogin($token)
+  {
+    if ($token !== null) {
+
+      try {
+
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare('DELETE FROM remembered_logins WHERE token = :token');
+        $stmt->bindParam(':token', $token);
+        $stmt->execute();
+
+      } catch(PDOException $exception) {
+
+        // Log the detailed exception
+        error_log($exception->getMessage());
+      }
+    }
+  }
+
+  /**
    * Validate the properties and set $this->errors if any are invalid
    *
    * @return boolean  true if valid, false otherwise
