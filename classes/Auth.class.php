@@ -129,4 +129,16 @@ class Auth
    }
  }
 
+ /**
+  * Redirect to the home page if a user is logged in.
+  *
+  * @return void
+  */
+ public function requireGuest()
+ {
+   if ($this->isLoggedIn()) {
+     Util::redirect('/index.php');
+   }
+ }
+
 }

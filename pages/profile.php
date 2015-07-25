@@ -23,6 +23,7 @@ include('../includes/header.php');
     <p class="profile-view">
       Name: <?php echo htmlspecialchars($user->name); ?><br>
       Email Address: <?php echo htmlspecialchars($user->email); ?>
+      <a href="pages/signout.php">Sign Out</a>
     </p>
   </div>
 </div>
