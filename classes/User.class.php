@@ -99,15 +99,23 @@ class User
 
     if ($user->isValid()) {
 
+      // Generate a random token for activation and base64 encode it so it's URL safe
+      $token = base64_encode(uniqid(rand(), true));
+      $hashed_token = sha1($token);
+
       try {
 
         $db = Database::getInstance();
 
-        $stmt = $db->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
+        $stmt = $db->prepare('INSERT INTO users (name, email, password, activation_token) VALUES (:name, :email, :password, :token)');
         $stmt->bindParam(':name', $user->name);
         $stmt->bindParam(':email', $user->email);
         $stmt->bindParam(':password', Hash::make($user->password));
+        $stmt->bindParam(':token', $hashed_token);
         $stmt->execute();
+
+        // Send activation email
+        $user->_sendActivationEmail($token);
 
       } catch(PDOException $exception) {
 
@@ -202,6 +210,30 @@ class User
 
     } catch(PDOException $exception) {
 
+      error_log($exception->getMessage());
+    }
+  }
+
+  /**
+   * Activate the user account, nullifying the activation token and setting the is_active flag
+   *
+   * @param string $token  Activation token
+   * @return void
+   */
+  public static function activateAccount($token)
+  {
+    $hashed_token = sha1($token);
+
+    try {
+
+      $db = Database::getInstance();
+
+      $stmt = $db->prepare('UPDATE users SET activation_token = NULL, is_active = TRUE WHERE activation_token = :token');
+      $stmt->execute([':token' => $hashed_token]);
+
+    } catch(PDOException $exception) {
+
+      // Log the detailed exception
       error_log($exception->getMessage());
     }
   }
@@ -398,6 +430,26 @@ class User
     if (isset($this->password_confirmation) && ($this->password != $this->password_confirmation)) {
       return 'Please enter the same password';
     }
+  }
+
+  /**
+   * Send activation email to the user based on the token
+   *
+   * @param string $token  Activation token
+   * @return mixed         User object if authenticated correctly, null otherwise
+   */
+  private function _sendActivationEmail($token)
+  {
+    // Note hardcoded protocol
+    $url = 'http://'.$_SERVER['HTTP_HOST'].'/sandbox/bazinga/pages/activate_account.php?token=' . $token;
+
+    $body = <<<EOT
+
+<p>Please click on the following link to activate your account.</p>
+<p><a href="$url">$url</a></p>
+EOT;
+
+    Mail::send($this->name, $this->email, 'Activate account', $body);
   }
 
 }
