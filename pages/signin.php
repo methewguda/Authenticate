@@ -61,7 +61,7 @@
       <a class="forgotPassword" href="pages/forgot_password.php">I forgot my password</a>
     </div>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In">Sign In</button>
   </form>
 </div> <!-- /container -->
 
