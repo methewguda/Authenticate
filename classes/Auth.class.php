@@ -181,7 +181,7 @@ public function sendPasswordReset($email)
     if ($user->startPasswordReset()) {
 
       // Note hardcoded protocol
-      $url = 'http://'.$_SERVER['HTTP_HOST'].'/sandbox/bazinga/pages/reset_password.php?token=' . $user->password_reset_token;
+      $url = 'http://'.$_SERVER['HTTP_HOST']. Util::SERVER_HOST . '/pages/reset_password.php?token=' . $user->password_reset_token;
 
       $body = <<<EOT
 <p>Please click on the following link to reset your password.</p>

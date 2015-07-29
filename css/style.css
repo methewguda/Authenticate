@@ -31,7 +31,8 @@ li{
 .form-signin-heading,
 .success-heading,
 .success-messege,
-.welcome-msg {
+.welcome-msg,
+.nav-bar {
   text-align: center;
 }
 
@@ -51,7 +52,8 @@ li{
 
 .form-signin .form-control,
 .success-messege,
-.profile-view {
+.profile-view,
+.nav-bar {
   position: relative;
   height: auto;
   -webkit-box-sizing: border-box;

@@ -20,10 +20,14 @@ include('../includes/header.php');
   <div class="success">
     <?php $user = Auth::getInstance()->getCurrentUser(); ?>
     <h1 class="success-heading">Profile</h1>
+    <div class="nav-bar">
+      <a href="pages/edit_profile.php">Edit Profile</a>
+      <a href="pages/signout.php">Sign Out</a>
+    </div>
     <p class="profile-view">
       Name: <?php echo htmlspecialchars($user->name); ?><br>
-      Email Address: <?php echo htmlspecialchars($user->email); ?>
-      <a href="pages/signout.php">Sign Out</a>
+      Email: <?php echo htmlspecialchars($user->email); ?><br>
+      Phone: <?php echo htmlspecialchars($user->phone);?>
     </p>
   </div>
 </div>

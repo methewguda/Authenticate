@@ -128,6 +128,39 @@ class User
   }
 
   /**
+   * Signup a new user
+   *
+   * @param array $data  POST data
+   * @return User
+   */
+  public static function updateProfile($data)
+  {
+    // Create a new user model and set the attributes
+    $user = new static();
+
+    $user->name = $data['name'];
+    $user->email = $data['email'];
+    $user->phone = $data['phone'];
+
+    try {
+
+      $db = Database::getInstance();
+
+      $stmt = $db->prepare('UPDATE users SET phone = :phone WHERE name = :name');
+      $stmt->bindParam(':name', $user->name);
+      $stmt->bindParam(':phone', $user->phone);
+      $stmt->execute();
+
+    } catch(PDOException $exception) {
+
+      // Log the exception message
+      error_log($exception->getMessage());
+    }
+
+    return $user;
+  }
+
+  /**
    * Find the user by remember token
    *
    * @param string $token  token
@@ -441,7 +474,7 @@ class User
   private function _sendActivationEmail($token)
   {
     // Note hardcoded protocol
-    $url = 'http://'.$_SERVER['HTTP_HOST'].'/sandbox/bazinga/pages/activate_account.php?token=' . $token;
+    $url = 'http://'.$_SERVER['HTTP_HOST']. Util::SERVER_HOST . '/pages/activate_account.php?token=' . $token;
 
     $body = <<<EOT
 

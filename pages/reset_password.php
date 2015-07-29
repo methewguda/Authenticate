@@ -44,13 +44,14 @@ include('../includes/header.php');
 ?>
 
 <?php if (isset($user)): ?>
-
   <?php if ( ! empty($user->errors)): ?>
+    <div class="error-log">
     <ul>
       <?php foreach ($user->errors as $error): ?>
         <li><?php echo $error; ?></li>
       <?php endforeach; ?>
     </ul>
+  </div>
   <?php endif; ?>
 <div class="container">
   <form class="form-signin" method="POST">

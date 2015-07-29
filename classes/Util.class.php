@@ -7,6 +7,8 @@
 class Util
 {
 
+  const SERVER_HOST = '/sandbox/bazinga';
+
   /**
    * Redirect to a different page
    *
